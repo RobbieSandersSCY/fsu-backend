@@ -1,12 +1,12 @@
 import db from "#db/client";
 
 /**
- *
- * @param {string} name - Department Name
- * @param {string} description - Department description
- * @param {string} contact_info - email address
- * @param {string} image_path - folder_path
- * @returns
+ * @param {object} department
+ * @param {string} department.name - department Name
+ * @param {string} department.description - department description
+ * @param {string} department.contact_info - email address
+ * @param {string} department.image_path - path to the department image
+ * @returns {object} the newly create department
  */
 export async function createDepartment({
   name,
@@ -31,6 +31,10 @@ export async function createDepartment({
   return department;
 }
 
+/**
+ *
+ * @returns {Promise<object[]>} returns all departments
+ */
 export async function getDepartments() {
   const sql = `
   SELECT *
@@ -38,4 +42,27 @@ export async function getDepartments() {
   `;
   const { rows: departments } = await db.query(sql);
   return departments;
+}
+
+/**
+ *
+ * @param {number} id id of the desired department
+ * @returns {Promise<object[]>}
+ */
+export async function getDepartmentByIdWithFaculty(id) {
+  const sql = `
+  SELECT
+    departments.*,
+    (
+      SELECT json_agg(faculty)
+      FROM faculty
+      WHERE faculty.department_id = departments.id
+    )
+  FROM departments
+  WHERE id = $1
+  `;
+  const {
+    rows: [department],
+  } = await db.query(sql, [id]);
+  return department;
 }

@@ -31,6 +31,7 @@ async function seed() {
       name: faker.person.fullName(),
       bio: faker.lorem.words(5),
       contact_info: faker.internet.email(),
+      department_id: Math.ceil(i / 3),
       image_path: "./images/faculty" + i + ".png",
     });
   }
