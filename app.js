@@ -3,6 +3,7 @@ const app = express();
 export default app;
 
 import departmentsRouter from "#api/departments";
+import facultyRouter from "#api/faculty";
 import getUserFromToken from "#middleware/getUserFromToken";
 // const cors = require("cors");
 // app.use(cors({ origin: /localhost/ }));
@@ -12,6 +13,7 @@ app.use(express.json());
 // app.use(getUserFromToken);
 
 app.use("/departments", departmentsRouter);
+app.use("/faculty", facultyRouter);
 
 app.use((err, req, res, next) => {
   switch (err.code) {
